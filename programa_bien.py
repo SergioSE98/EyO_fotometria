@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Sat Apr 10 13:19:34 2021
+
+@author: Sergio
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Fri Mar 12 15:10:46 2021
 
 @author: Sergi
@@ -119,7 +126,8 @@ uka0_normflux_interp_J_ph = (uka0_normflux_interp_J*J_long)/(h*c)
 uka0_normflux_interp_H_ph = (uka0_normflux_interp_H*H_long)/(h*c)
 uka0_normflux_interp_K_ph = (uka0_normflux_interp_K*K_long)/(h*c)
 
-
+print(len(J_long))
+print(len(ukk5_normflux_interp_J))
 
 #Calculo primero para VEGA (estrella de referencia)
 
@@ -277,15 +285,17 @@ imag1.savefig("Transmision_tanto_por_uno.png")
 
 ukk5_integ_norm_J = 0.3*(sum(ukk5_normflux_interp_J*J_trans)*dist_J_long)
 ukk5_C_J = flux_W_J/ukk5_integ_norm_J
-ukk5_absflux_J_W = ukk5_C_J*ukk5_normflux
+ukk5_absflux_J_W = ukk5_C_J*ukk5_normflux_interp_J
+
 
 ukk5_integ_norm_H = 0.3*(sum(ukk5_normflux_interp_H*H_trans)*dist_H_long)
 ukk5_C_H = flux_W_H/ukk5_integ_norm_H
-ukk5_absflux_H_W = ukk5_C_H*ukk5_normflux
+ukk5_absflux_H_W = ukk5_C_H*ukk5_normflux_interp_H
+
 
 ukk5_integ_norm_K = 0.3*(sum(ukk5_normflux_interp_K*K_trans)*dist_K_long)
 ukk5_C_K = flux_W_K/ukk5_integ_norm_K
-ukk5_absflux_K_W = ukk5_C_K*ukk5_normflux
+ukk5_absflux_K_W = ukk5_C_K*ukk5_normflux_interp_K
 
 
 #Calculo también estos flujos en photons
@@ -305,23 +315,23 @@ ukk5_normflux_ph_renorm_K = ukk5_normflux_interp_K_ph/((1.029639*5550)/(h*c))
 
 ukk5_integ_norm_J_ph = 0.3*(sum(ukk5_normflux_ph_renorm_J*J_trans)*dist_J_long)
 ukk5_C_J_ph = flux_ph_J/ukk5_integ_norm_J_ph
-ukk5_absflux_J_ph = ukk5_C_J_ph*ukk5_normflux_ph_renorm
+ukk5_absflux_J_ph = ukk5_C_J_ph*ukk5_normflux_ph_renorm_J
 
 ukk5_integ_norm_H_ph = 0.3*(sum(ukk5_normflux_ph_renorm_H*H_trans)*dist_H_long)
 ukk5_C_H_ph = flux_ph_H/ukk5_integ_norm_H_ph
-ukk5_absflux_H_ph = ukk5_C_H_ph*ukk5_normflux_ph_renorm
+ukk5_absflux_H_ph = ukk5_C_H_ph*ukk5_normflux_ph_renorm_H
 
 ukk5_integ_norm_K_ph = 0.3*(sum(ukk5_normflux_ph_renorm_K*K_trans)*dist_K_long)
 ukk5_C_K_ph = flux_ph_K/ukk5_integ_norm_K_ph
-ukk5_absflux_K_ph = ukk5_C_K_ph*ukk5_normflux_ph_renorm
+ukk5_absflux_K_ph = ukk5_C_K_ph*ukk5_normflux_ph_renorm_K
 
 
 #Ahora imprimo actuación por filtros de ukk5iii en watts y photons
 
 imag2 = plt.figure("Transmisión UKK5III Watts")
-plt.plot(ukk5_long, ukk5_absflux_J_W, "b", label = "J")
-plt.plot(ukk5_long, ukk5_absflux_H_W, "g", label = "H")
-plt.plot(ukk5_long, ukk5_absflux_K_W, "r", label = "K")
+plt.plot(J_long, ukk5_absflux_J_W, "b", label = "J")
+plt.plot(H_long, ukk5_absflux_H_W, "g", label = "H")
+plt.plot(K_long, ukk5_absflux_K_W, "r", label = "K")
 plt.legend()
 plt.xlabel("Longitud de onda $[\mu m]$")
 plt.ylabel("Flujo $[W \, m^{-2} \, \mu m^{-1}]$ ")
@@ -330,9 +340,9 @@ plt.grid(linestyle="--", linewidth = 0.5)
 imag2.savefig("Transmision_ukk5iii_watts.png")
 
 imag3 = plt.figure("Transmisión UKK5III Photons")
-plt.plot(ukk5_long, ukk5_absflux_J_ph, "b", label = "J")
-plt.plot(ukk5_long, ukk5_absflux_H_ph, "g", label = "H")
-plt.plot(ukk5_long, ukk5_absflux_K_ph, "r", label = "K")
+plt.plot(J_long, ukk5_absflux_J_ph, "b", label = "J")
+plt.plot(H_long, ukk5_absflux_H_ph, "g", label = "H")
+plt.plot(K_long, ukk5_absflux_K_ph, "r", label = "K")
 plt.legend()
 plt.xlabel("Longitud de onda $[\mu m]$")
 plt.ylabel("Flujo $[ph/s \; m^{-2} \, \mu m^{-1}]$ ")
@@ -349,15 +359,15 @@ imag3.savefig("Transmision_ukk5iii_photons.png")
 
 uka0_integ_norm_J = 0.3*(sum(uka0_normflux_interp_J*J_trans)*dist_J_long)
 uka0_C_J = flux_W_J/uka0_integ_norm_J
-uka0_absflux_J_W = uka0_C_J*uka0_normflux
+uka0_absflux_J_W = uka0_C_J*uka0_normflux_interp_J
 
 uka0_integ_norm_H = 0.3*(sum(uka0_normflux_interp_H*H_trans)*dist_H_long)
 uka0_C_H = flux_W_H/uka0_integ_norm_H
-uka0_absflux_H_W = uka0_C_H*uka0_normflux
+uka0_absflux_H_W = uka0_C_H*uka0_normflux_interp_H
 
 uka0_integ_norm_K = 0.3*(sum(uka0_normflux_interp_K*K_trans)*dist_K_long)
 uka0_C_K = flux_W_K/uka0_integ_norm_K
-uka0_absflux_K_W = uka0_C_K*uka0_normflux
+uka0_absflux_K_W = uka0_C_K*uka0_normflux_interp_K
 
 
 #Calculo también estos flujos en photons
@@ -377,23 +387,23 @@ uka0_normflux_ph_renorm_K = uka0_normflux_interp_K_ph/((1.011062*5550)/(h*c))
 
 uka0_integ_norm_J_ph = 0.3*(sum(uka0_normflux_ph_renorm_J*J_trans)*dist_J_long)
 uka0_C_J_ph = flux_ph_J/uka0_integ_norm_J_ph
-uka0_absflux_J_ph = uka0_C_J_ph*uka0_normflux_ph_renorm
+uka0_absflux_J_ph = uka0_C_J_ph*uka0_normflux_ph_renorm_J
 
 uka0_integ_norm_H_ph = 0.3*(sum(uka0_normflux_ph_renorm_H*H_trans)*dist_H_long)
 uka0_C_H_ph = flux_ph_H/uka0_integ_norm_H_ph
-uka0_absflux_H_ph = uka0_C_H_ph*uka0_normflux_ph_renorm
+uka0_absflux_H_ph = uka0_C_H_ph*uka0_normflux_ph_renorm_H
 
 uka0_integ_norm_K_ph = 0.3*(sum(uka0_normflux_ph_renorm_K*K_trans)*dist_K_long)
 uka0_C_K_ph = flux_ph_K/uka0_integ_norm_K_ph
-uka0_absflux_K_ph = uka0_C_K_ph*uka0_normflux_ph_renorm
+uka0_absflux_K_ph = uka0_C_K_ph*uka0_normflux_ph_renorm_K
 
 
 #Ahora imprimo actuación por filtros de uka0v en watts y photons
 
 imag4 = plt.figure("Transmisión uka0III Watts")
-plt.plot(uka0_long, uka0_absflux_J_W, "b", label = "J")
-plt.plot(uka0_long, uka0_absflux_H_W, "g", label = "H")
-plt.plot(uka0_long, uka0_absflux_K_W, "r--", label = "K")
+plt.plot(J_long, uka0_absflux_J_W, "b", label = "J")
+plt.plot(H_long, uka0_absflux_H_W, "g", label = "H")
+plt.plot(K_long, uka0_absflux_K_W, "r", label = "K")
 plt.legend()
 plt.xlabel("Longitud de onda $[\mu m]$")
 plt.ylabel("Flujo $[W \, m^{-2} \, \mu m^{-1}]$ ")
@@ -402,24 +412,15 @@ plt.grid(linestyle="--", linewidth = 0.5)
 imag4.savefig("Transmision_uka0v_watts.png")
 
 imag5 = plt.figure("Transmisión uka0v Photons")
-plt.plot(uka0_long, uka0_absflux_J_ph, "b", label = "J")
-plt.plot(uka0_long, uka0_absflux_H_ph, "g", label = "H")
-plt.plot(uka0_long, uka0_absflux_K_ph, "r--", label = "K")
+plt.plot(J_long, uka0_absflux_J_ph, "b", label = "J")
+plt.plot(H_long, uka0_absflux_H_ph, "g", label = "H")
+plt.plot(K_long, uka0_absflux_K_ph, "r", label = "K")
 plt.legend()
 plt.xlabel("Longitud de onda $[\mu m]$")
 plt.ylabel("Flujo $[ph/s \; m^{-2} \, \mu m^{-1}]$ ")
 plt.title("Transmisión de UKA0V [fotones]")
 plt.grid(linestyle="--", linewidth = 0.5)
 imag5.savefig("Transmision_uka0v_photons.png")
-
-
-
-
-
-
-
-
-
 
 
 
